@@ -1,0 +1,3 @@
+[submodule "Eigen"]
+	path = Eigen
+	url = git@github.com:brown-cs-224/Eigen.git
