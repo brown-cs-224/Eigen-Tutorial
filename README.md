@@ -90,8 +90,9 @@ The first method uses the comma-initializer syntax: the programmer specifies the
 
 ```cpp
 // Initialize B by assigning values to its individual elements
-for i = 1:4 {
-    for j = 1:4 {
+// Note that the matrix is zero-indexed
+for (int col = 0; col < 4; ++col) {
+    for (int row = 0; row < 4; ++row) {
         B(j, i) = 0.0;
     }
 }
@@ -184,8 +185,8 @@ cout << M1.array().square() << endl;
 cout << M1.array() * Matrix4f::Identity().array() << endl;
 
 // All relational operators can be applied element -wise
-cout << M1.array() <= M2.array() << endl << endl;
-cout << M1.array() > M2.array() << endl;
+cout << (M1.array() <= M2.array()) << endl << endl;
+cout << (M1.array() >  M2.array()) << endl;
 ```
 
 **Warning**: these operations do not work in-place. That is, calling `M1.array().sqrt()` returns a new matrix, with `M1` retaining its original value.
