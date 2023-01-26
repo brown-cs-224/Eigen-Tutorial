@@ -92,9 +92,9 @@ A << 1.0f, 0.0f, 0.0f,
 
 // Initialize B by accessing individual elements
 for i = 1:4 {
-for j = 1:4 {
-B(j, i) = 0.0;
-}
+    for j = 1:4 {
+        B(j, i) = 0.0;
+    }
 }
 ```
 
@@ -123,23 +123,20 @@ In addition to the above two methods, Eigen provides utility functions to initia
 predefined values:
 
 ```
-// Set each coefficient to a uniform random value in the range
-[-1, 1]
-A = Matrix3f :: Random ();
+// Set each coefficient to a uniform random value in the range [-1, 1]
+A = Matrix3f::Random();
 
 // Set B to the identity matrix
-B = Matrix4d :: Identity ();
+B = Matrix4d::Identity();
 
 // Set all elements to zero
-A = Matrix3f ::Zero();
+A = Matrix3f::Zero();
 
 // Set all elements to ones
-A = Matrix3f ::Ones();
-```
+A = Matrix3f::Ones();
 
-```
 // Set all elements to a constant value
-B = Matrix4d :: Constant (4.5);
+B = Matrix4d::Constant(4.5);
 ```
 
 ### Matrix Operations
@@ -147,72 +144,68 @@ B = Matrix4d :: Constant (4.5);
 Common arithmetic operators are overloaded to work with matrices:
 
 ```
-Matrix4f M1 = Matrix4f :: Random ();
-Matrix4f M2 = Matrix4f :: Constant (2.2);
-```
+Matrix4f M1 = Matrix4f::Random();
+Matrix4f M2 = Matrix4f::Constant(2.2);
 
-```
+
 // Addition
-// The size and the coefficient -types of the matrices must match
+// The size and the coefficient-types of the matrices must match
 cout << M1 + M2 << endl;
-```
 
-```
+
 // Matrix multiplication
-// The inner dimensions and the coefficient -types must match
+// The inner dimensions and the coefficient-types must match
 cout << M1 * M2 << endl;
-```
 
-```
-// Scalar multiplication , and subtraction
+
+// Scalar multiplication and subtraction
 // What do you expect the output to be?
-cout << M2 - Matrix4f ::Ones() * 2.2 << endl;
+cout << M2 - Matrix4f::Ones() * 2.2 << endl;
 ```
 
-Equality (==) and inequality (!=) are the only relational operators that work with matrices.
+Equality (`==`) and inequality (`!=`) are the only relational operators that work with matrices.
 Two matrices are considered equal if all corresponding coefficients are equal.
 
 ```
-cout << (M2 - Matrix4f ::Ones() * 2.2 == Matrix4f ::Zero())
-<< endl;
+cout << (M2 - Matrix4f::Ones() * 2.2 == Matrix4f ::Zero()) << endl;
 ```
 
 Common matrix operations are provided as methods of the matrix class:
 
 ```
 // Transposition
-cout << M1.transpose () << endl;
+cout << M1.transpose() << endl;
 
-// Inversion ( #include <Eigen/Dense > )
+// Inversion ( #include "Eigen/Dense" )
 // Generates NaNs if the matrix is not invertible
-cout << M1.inverse () << endl;
+cout << M1.inverse() << endl;
 ```
 
 Sometimes, we may prefer to apply an operation to a matrix element-wise. This can be done
-by asking Eigen to treat the matrix as a general array by invoking thearray()method:
+by asking Eigen to treat the matrix as a general array by invoking the `array()` method:
 
 ```
 // Square each element of the matrix
-cout << M1.array().square () << endl;
+cout << M1.array().square() << endl;
 
 // Multiply two matrices element -wise
-cout << M1.array() * Matrix4f :: Identity ().array() << endl;
+cout << M1.array() * Matrix4f::Identity().array() << endl;
 
 // All relational operators can be applied element -wise
 cout << M1.array() <= M2.array() << endl << endl;
 cout << M1.array() > M2.array() << endl;
 ```
 
-Note that these operations do not work in-place. That is, callingM1.array().sqrt()returns
-a new matrix, withM1retaining its original value.
+Note that these operations do not work in-place. That is, calling `M1.array().sqrt()` returns
+a new matrix, with `M1` retaining its original value.
 
 ## Vectors
 
 A vector in Eigen is nothing more than a matrix with a single column:
 
 ```
-typedef Matrix <float, 3, 1> Vector3f;
-typedef Matrix <double, 4, 1> Vector4d;
+typedef Matrix<float, 3, 1> Vector3f;
+typedef Matrix<double, 4, 1> Vector4d;
 ```
 
 Consequently, many of the operators and functions we discussed above for matrices also work
@@ -231,10 +224,10 @@ constructor
 Vector3f w(1.0f, 2.0f, 3.0f);
 
 // Utility functions
-Vector3f v1 = Vector3f ::Ones();
-Vector3f v2 = Vector3f ::Zero();
-Vector4d v3 = Vector4d :: Random ();
-Vector4d v4 = Vector4d :: Constant (1.8);
+Vector3f v1 = Vector3f::Ones();
+Vector3f v2 = Vector3f::Zero();
+Vector4d v3 = Vector4d::Random();
+Vector4d v4 = Vector4d::Constant(1.8);
 
 // Arithmetic operations
 cout << v1 + v2 << endl << endl;
@@ -246,32 +239,31 @@ cout << v4 * 2 << endl;
 // Equality
 // Again , equality and inequality are the only relational
 // operators that work with vectors
-cout << (Vector2f ::Ones() * 3 == Vector2f :: Constant (3)) << endl;
+cout << (Vector2f::Ones() * 3 == Vector2f::Constant(3)) << endl;
 ```
 
 Since vectors are just one-dimensional matrices, matrix-vector multiplication works as long as
 the inner dimensions and coefficient-types of the operands agree:
 
 ```
-Vector4f v5 = Vector4f (1.0f, 2.0f, 3.0f, 4.0f);
+Vector4f v5 = Vector4f(1.0f, 2.0f, 3.0f, 4.0f);
 
 // 4x4 * 4x1 - Works!
-cout << Matrix4f :: Random () * v5 << endl;
+cout << Matrix4f::Random() * v5 << endl;
 
 // 4x1 * 4x4 - Compiler Error!
-cout << v5 * Matrix4f :: Random () << endl;
+cout << v5 * Matrix4f::Random() << endl;
 ```
 
-As you would expect, matrix multiplication doesn’t work with two vectors as the inner dimen-
-sions of two nx1 matrices don’t match. However, transposing one of the vectors fixes this:
+As you would expect, matrix multiplication doesn't work with two vectors as the inner dimensions of two `n`x`1` matrices don't match. However, transposing one of the vectors fixes this:
 
 ```
 // Transposition converts the column vector to a row vector
 // This makes the inner dimensions match , allowing matrix
 multiplication
-v1 = Vector3f :: Random ();
-v2 = Vector3f :: Random ();
-cout << v1 * v2.transpose () << endl;
+v1 = Vector3f::Random();
+v2 = Vector3f::Random();
+cout << v1 * v2.transpose() << endl;
 ```
 
 The linear algebra savvy amongst us probably recognized the last operation as nothing other
@@ -280,13 +272,13 @@ common operations:
 
 ```
 cout << v1.dot(v2) << endl << endl;
-cout << v1.normalized () << endl << endl;
+cout << v1.normalized() << endl << endl;
 cout << v1.cross(v2) << endl;
 
 // Convert a vector to and from homogenous coordinates
-Vector3f s = Vector3f :: Random ();
-Vector4f q = s.homogeneous ();
-cout << (s == q.hnormalized ()) << endl;
+Vector3f s = Vector3f::Random();
+Vector4f q = s.homogeneous();
+cout << (s == q.hnormalized()) << endl;
 ```
 
 And, finally, element-wise operations can be performed by asking Eigen to treat the vector as
@@ -299,77 +291,74 @@ cout << v1.array().sin() << endl;
 
 ## Example: Vertex Transformation
 
-Now that we have a basic understanding of Eigen, let’s use it to perform a very common
+Now that we have a basic understanding of Eigen, let's use it to perform a very common
 operation in graphics: vertex transformation.
 
 ```
 #include "Eigen/Core"
 #include "Eigen/Geometry"
 
-#include <iostream >
+#include <iostream>
 
 using namespace std;
 using namespace Eigen;
 
 int main() {
+    float arrVertices [] = {
+        -1.0, -1.0, -1.0,
+        1.0, -1.0, -1.0,
+        1.0, 1.0, -1.0,
+        -1.0, 1.0, -1.0,
+        -1.0, -1.0, 1.0,
+        1.0, -1.0, 1.0,
+        1.0, 1.0, 1.0,
+        -1.0, 1.0, 1.0
+    };
 
-float arrVertices [] = { -1.0, -1.0, -1.0,
-1.0, -1.0, -1.0,
-1.0, 1.0, -1.0,
--1.0, 1.0, -1.0,
--1.0, -1.0, 1.0,
-1.0, -1.0, 1.0,
-1.0, 1.0, 1.0,
--1.0, 1.0, 1.0};
+    MatrixXf mVertices = Map<Matrix<float, 3, 8>>(arrVertices);
 
-MatrixXf mVertices = Map < Matrix <float, 3, 8> > (arrVertices);
+    Transform<float, 3, Affine> t = Transform<float, 3, Affine>::Identity();
 
-Transform <float, 3, Affine > t = Transform <float, 3, Affine >::
-Identity ();
+    t.scale(0.8f);
+    t.rotate(AngleAxisf(0.25f * M_PI, Vector3f::UnitX()));
+    t.translate(Vector3f(1.5, 10.2, -5.1));
 
-t.scale( 0.8f );
-t.rotate( AngleAxisf (0.25f * M_PI , Vector3f ::UnitX () ) );
-t.translate( Vector3f (1.5, 10.2, -5.1) );
-
-cout << t * mVertices.colwise ().homogeneous () << endl;
+    cout << t * mVertices.colwise().homogeneous() << endl;
 }
 ```
 
 This example introduces several new Eigen constructs.
 
-To start with, we are using a C++ array to initialize aMatrixXfobject. The array holds the
-x, y, and z coordinates of the vertices of a cube.^2 Eigen’sMapclass allows us to perform this
+To start with, we are using a C++ array to initialize a `MatrixXf` object. The array holds the
+x, y, and z coordinates of the vertices of a cube. Eigen's `Map` class allows us to perform this
 initialization.
 
 Next, we create a transformation. You may recall from linear algebra that a transformation is
 nothing more than a matrix. This is also true in Eigen — theTransformclass just makes it
 easier to deal with the underlying matrix representation. You can access the underlying matrix
-by callingt.matrix().
+by calling `t.matrix()`.
 
-Transform<float, 3, Affine> tcreates a 3-dimensional affine transformation with single-
+`Transform<float, 3, Affine> t` creates a 3-dimensional affine transformation with single-
 precision floating point coefficients. The next three lines apply a uniform scaling, rotation, and
 translation to the created transform object. In matrix form, this may be written as
 
 ```
-U=T RSI
+U = TRSI
 ```
 
 WhereIis the identity matrix.
 
-The rotation is specified as a combination of angle and rotation-axis by using theAngleAxisf
+The rotation is specified as a combination of angle and rotation-axis by using the `AngleAxisf`
 class. The axis should be normalized, and in most cases we can simply use the convenience
-functions Vector3f::UnitX(), Vector3f::UnitY, andVector3f::UnitZ() which represent
+functions `Vector3f::UnitX()`, `Vector3f::UnitY`, and `Vector3f::UnitZ()` which represent
 unit vectors in the x, y, and z directions, respectively.
-
-(^2) We could have loaded the array into an array of eightVector3fobjects. However, storing it as a matrix is
-more efficient, and leads to cleaner code.
 
 Finally, we apply the transformation to the vertices of our cube. See how storing the vertices as
 columns of a matrix allows us to transform all vertices with a single matrix multiplication. To do
 this, however, the inner dimensions of the transformation matrix, and the vertex matrix have to
-match. tuses homogeneous coordinates, and so a 3-dimensional transformation is represented
+match. `t` uses homogeneous coordinates, and so a 3-dimensional transformation is represented
 as a 4x4 matrix. To match these dimensions, we homogenize each column of our vertex matrix
-by using thecolwise()method.
+by using the `colwise()` method.
 
 Each column of the output represents a transformed vertex:
 
@@ -381,5 +370,4 @@ Each column of the output represents a transformed vertex:
 
 ## Further Reading
 
-The Eigen Quick Reference Guide provides a handy reference to most matrix and vector oper-
-ations:https://eigen.tuxfamily.org/dox/group__QuickRefPage.html
+The Eigen Quick Reference Guide provides a handy reference to most matrix and vector operations: https://eigen.tuxfamily.org/dox/group__QuickRefPage.html
