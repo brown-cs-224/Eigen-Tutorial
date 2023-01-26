@@ -325,12 +325,12 @@ The rotation is specified as a combination of angle and rotation-axis by using t
 
 Finally, we apply the transformation to the vertices of our cube. See how storing the vertices as columns of a matrix allows us to transform all vertices with a single matrix multiplication. To do this, however, the inner dimensions of the transformation matrix, and the vertex matrix have to match. `t` uses homogeneous coordinates, and so a 3-dimensional transformation is represented as a 4x4 matrix. To match these dimensions, we homogenize each column of our vertex matrix by using the `colwise()` method.
 
-Each column of the output represents a transformed vertex. This is represented below, nicely formatted:
+Each column of the output represents a transformed vertex. This can be seen in the printout you might get from the above code snippet:
 
 ```
-0.4     2       2       0.4     0.4     2       2       0.
-8.65499 8.65499 9.78636 9.78636 7.52362 7.52362 8.65499 8.
-1.75362 1.75362 2.885   2.885   2.885   2.885   4.01637 4.
+    0.4       2       2     0.4     0.4       2       2     0.4
+8.65499 8.65499 9.78636 9.78636 7.52362 7.52362 8.65499 8.65499
+1.75362 1.75362   2.885   2.885   2.885   2.885 4.01637 4.01637
 ```
 
 ## Further Reading
