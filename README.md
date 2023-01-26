@@ -11,19 +11,20 @@ to readers possessing basic knowledge of C++, linear algebra, and computer graph
 
 After reading this tutorial, the reader should be able to
 
-1. Install Eigen on computers running Linux, Mac OS, and Windows.
-2. Create and initialize matrices and vectors of any size with Eigen in C++.
-3. Use Eigen for basic algebraic operations on matrices and vectors. The reader should be able to perform addition, multiplication, scalar multiplication, and matrix inversion and transposition.
-4. Use Eigen’s built-in functions to create 4x4 transformation matrices.
+1. Create and initialize matrices and vectors of any size with Eigen in C++.
+2. Use Eigen for basic algebraic operations on matrices and vectors. The reader should be able to perform addition, multiplication, scalar multiplication, and matrix inversion and transposition.
+3. Use Eigen’s built-in functions to create 4x4 transformation matrices.
 
 ## Installing Eigen
 
 In this course, we will include Eigen separately in each project to make sure there are no versioning conflicts. While you could install Eigen globally on your machine, this could present challenges if you have multiple projects that rely on different versions of Eigen.
 
 We've added Eigen as a git submodule to all project repositories, so you can download it by running
+
 ```
 git submodule update --init --recursive
 ```
+
 Try it now on this repository and verify that the `Eigen` directory is not empty.
 
 ### Good day, Universe!
@@ -53,6 +54,7 @@ Creating matrices with Eigen is simple:
 Matrix3f A;
 Matrix4d B;
 ```
+
 Eigen uses a naming convention for its datatypes that is quite similar to OpenGL. The actual
 datatype name is followed by suffixes that describe its size, and the type of its member elements
 respectively. In the example above, the variableAis of typeMatrix3f— that is, a 3x3 matrix
@@ -68,6 +70,7 @@ Matrix <short, 5, 5> M1;
 // 20x75 matrix of type float
 Matrix <float, 20, 75> M2;
 ```
+
 In fact, this is howallmatrices in Eigen are created under the hood. The datatype names
 described above are only provided as a convenience for commonly used sizes and types. What’s
 more, Eigen even allows us to create matrices whose size is not known at compile time by using
@@ -94,10 +97,11 @@ B(j, i) = 0.0;
 }
 }
 ```
+
 The first method shown above uses the comma initializer syntax: the programmer specifies
 the coefficients row by row. Note that all coefficients need to be provided — if the number of
 coefficients does not match the size of the matrix, the compiler will throw an error. Thus, you
-can imagine this syntax becoming quite cumbersome for large matrices.^1
+can imagine this syntax becoming quite cumbersome for large matrices.
 
 The second method accesses the individual coefficients of the matrix B using the overloaded
 parentheses operators. Indexing starts at zero, with the first index specifying the row number,
@@ -107,6 +111,7 @@ to query the coefficients. Can you guess whether the following code prints a zer
 ```
 cout << A(1, 2);
 ```
+
 Notice that we have structured our loops such that the outer loop runs over the columns, and
 the inner loop iterates over the rows. Doing it the other way around would have worked too,
 but would have been less efficient. This is because Eigen stores matrices incolumn-major order
@@ -131,15 +136,12 @@ A = Matrix3f ::Zero();
 // Set all elements to ones
 A = Matrix3f ::Ones();
 ```
-(^1) When using comma initialization, the inputs can even be other matrices and vectors. You can learn more
-about this feature athttps://eigen.tuxfamily.org/dox/group__TutorialAdvancedInitialization.html.
-
-
 
 ```
 // Set all elements to a constant value
 B = Matrix4d :: Constant (4.5);
 ```
+
 ### Matrix Operations
 
 Common arithmetic operators are overloaded to work with matrices:
@@ -148,21 +150,25 @@ Common arithmetic operators are overloaded to work with matrices:
 Matrix4f M1 = Matrix4f :: Random ();
 Matrix4f M2 = Matrix4f :: Constant (2.2);
 ```
+
 ```
 // Addition
 // The size and the coefficient -types of the matrices must match
 cout << M1 + M2 << endl;
 ```
+
 ```
 // Matrix multiplication
 // The inner dimensions and the coefficient -types must match
 cout << M1 * M2 << endl;
 ```
+
 ```
 // Scalar multiplication , and subtraction
 // What do you expect the output to be?
 cout << M2 - Matrix4f ::Ones() * 2.2 << endl;
 ```
+
 Equality (==) and inequality (!=) are the only relational operators that work with matrices.
 Two matrices are considered equal if all corresponding coefficients are equal.
 
@@ -170,6 +176,7 @@ Two matrices are considered equal if all corresponding coefficients are equal.
 cout << (M2 - Matrix4f ::Ones() * 2.2 == Matrix4f ::Zero())
 << endl;
 ```
+
 Common matrix operations are provided as methods of the matrix class:
 
 ```
@@ -180,6 +187,7 @@ cout << M1.transpose () << endl;
 // Generates NaNs if the matrix is not invertible
 cout << M1.inverse () << endl;
 ```
+
 Sometimes, we may prefer to apply an operation to a matrix element-wise. This can be done
 by asking Eigen to treat the matrix as a general array by invoking thearray()method:
 
@@ -194,9 +202,9 @@ cout << M1.array() * Matrix4f :: Identity ().array() << endl;
 cout << M1.array() <= M2.array() << endl << endl;
 cout << M1.array() > M2.array() << endl;
 ```
+
 Note that these operations do not work in-place. That is, callingM1.array().sqrt()returns
 a new matrix, withM1retaining its original value.
-
 
 ## Vectors
 
@@ -206,6 +214,7 @@ A vector in Eigen is nothing more than a matrix with a single column:
 typedef Matrix <float, 3, 1> Vector3f;
 typedef Matrix <double, 4, 1> Vector4d;
 ```
+
 Consequently, many of the operators and functions we discussed above for matrices also work
 with vectors. The naming convention is also similar (in this case, the size suffix defines the
 one-dimensional length, rather than the square dimensions).
@@ -239,6 +248,7 @@ cout << v4 * 2 << endl;
 // operators that work with vectors
 cout << (Vector2f ::Ones() * 3 == Vector2f :: Constant (3)) << endl;
 ```
+
 Since vectors are just one-dimensional matrices, matrix-vector multiplication works as long as
 the inner dimensions and coefficient-types of the operands agree:
 
@@ -263,6 +273,7 @@ v1 = Vector3f :: Random ();
 v2 = Vector3f :: Random ();
 cout << v1 * v2.transpose () << endl;
 ```
+
 The linear algebra savvy amongst us probably recognized the last operation as nothing other
 than the dot product. In fact, vectors have built-in functions for the dot product, and other
 common operations:
@@ -277,6 +288,7 @@ Vector3f s = Vector3f :: Random ();
 Vector4f q = s.homogeneous ();
 cout << (s == q.hnormalized ()) << endl;
 ```
+
 And, finally, element-wise operations can be performed by asking Eigen to treat the vector as
 a general array:
 
@@ -284,11 +296,11 @@ a general array:
 cout << v1.array() * v2.array() << endl << endl;
 cout << v1.array().sin() << endl;
 ```
+
 ## Example: Vertex Transformation
 
 Now that we have a basic understanding of Eigen, let’s use it to perform a very common
 operation in graphics: vertex transformation.
-
 
 ```
 #include "Eigen/Core"
@@ -322,6 +334,7 @@ t.translate( Vector3f (1.5, 10.2, -5.1) );
 cout << t * mVertices.colwise ().homogeneous () << endl;
 }
 ```
+
 This example introduces several new Eigen constructs.
 
 To start with, we are using a C++ array to initialize aMatrixXfobject. The array holds the
@@ -340,6 +353,7 @@ translation to the created transform object. In matrix form, this may be written
 ```
 U=T RSI
 ```
+
 WhereIis the identity matrix.
 
 The rotation is specified as a combination of angle and rotation-axis by using theAngleAxisf
@@ -349,7 +363,6 @@ unit vectors in the x, y, and z directions, respectively.
 
 (^2) We could have loaded the array into an array of eightVector3fobjects. However, storing it as a matrix is
 more efficient, and leads to cleaner code.
-
 
 Finally, we apply the transformation to the vertices of our cube. See how storing the vertices as
 columns of a matrix allows us to transform all vertices with a single matrix multiplication. To do
@@ -365,10 +378,8 @@ Each column of the output represents a transformed vertex:
 8.65499 8.65499 9.78636 9.78636 7.52362 7.52362 8.65499 8.
 1.75362 1.75362 2.885 2.885 2.885 2.885 4.01637 4.
 ```
+
 ## Further Reading
 
 The Eigen Quick Reference Guide provides a handy reference to most matrix and vector oper-
 ations:https://eigen.tuxfamily.org/dox/group__QuickRefPage.html
-
-
-
