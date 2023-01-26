@@ -262,7 +262,7 @@ cout << v1.cross(v2) << endl;
 // Convert a vector to and from homogenous coordinates
 Vector3f s = Vector3f::Random();
 Vector4f q = s.homogeneous();
-cout << (s == q.hnormalized()) << endl;
+cout << (s == q.normalized()) << endl;
 ```
 
 And, finally, element-wise operations can be performed by asking Eigen to treat the vector as a general array:
