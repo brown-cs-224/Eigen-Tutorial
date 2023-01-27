@@ -93,7 +93,7 @@ The first method uses the comma-initializer syntax: the programmer specifies the
 // Note that the matrix is zero-indexed
 for (int col = 0; col < 4; ++col) {
     for (int row = 0; row < 4; ++row) {
-        B(j, i) = 0.0;
+        B(row, col) = 0.0;
     }
 }
 ```
