@@ -342,3 +342,8 @@ You will almost certainly have to refer to the Eigen documentation, especially f
 
 All the best!
 
+## Common Pitfalls
+
+You may also want to check out the common pitfalls page in the Eigen guide here: https://eigen.tuxfamily.org/dox/TopicPitfalls.html
+
+In particular, using `auto` with Matrix types can lead to very weird, unexpected behavior. The documentation recommends you do not use the auto keywords with Eigen's expressions.
