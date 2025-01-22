@@ -346,4 +346,17 @@ All the best!
 
 You may also want to check out the common pitfalls page in the Eigen guide here: https://eigen.tuxfamily.org/dox/TopicPitfalls.html
 
-In particular, using `auto` with Matrix types can lead to very weird, unexpected behavior. The documentation recommends you do not use the auto keywords with Eigen's expressions.
+In particular, using `auto` with Matrix types can lead to very weird, unexpected behavior. The documentation recommends you do not use the auto keywords with Eigen's expressions. This is because Eigen uses expression templates to enable lazy evaluation as an optimization.
+
+In the following code as an example, C++ does not infer `C` as a `MatrixDx` but instead as an abstract matrix product expression referencing `A` and `B`. With lazy evaluation, the multiplication is first evaluated at `MatrixXd R1 = C` such that `R1 = A * B`. When `A` is changed afterwards with `A = D`, the multiplication evaluated at `MatrixXd R2 = C` is equivalent to `R2 = A * B = D * B` so R1 ≠ R2 which may be unexpected.
+
+```c++
+MatrixXd A = ..., B = ...;
+auto C = A*B;
+MatrixXd R1 = C;
+
+MatrixXd D = ...;
+A = D;
+MatrixXd R2 = C;
+// Note that R1 != R2
+```
